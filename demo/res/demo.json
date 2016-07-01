@@ -55,6 +55,10 @@
       {
         "title": "Router",
         "url": "common/router.html"
+      },
+      {
+        "title": "Svg",
+        "url": "common/svg.html"
       }
     ]
   },

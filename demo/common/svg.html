@@ -1,0 +1,95 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+  <title>Basis.js demos: SVG</title>
+
+  <style type="text/css" id="demo-css">
+    HTML,
+    BODY
+    {
+      font-size: small;
+      font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+
+    .toolbar
+    {
+      height: 100px;
+      width: 100px;
+      cursor: pointer;
+    }
+
+    .red
+    {
+      color: crimson;
+    }
+    .red:hover
+    {
+      color: firebrick;
+    }
+
+    .green
+    {
+      color: forestgreen;
+    }
+    .green:hover
+    {
+      color: darkgreen;
+    }
+
+    .yellow
+    {
+      color: gold;
+    }
+    .yellow:hover
+    {
+      color: chocolate;
+    }
+
+    .rect
+    {
+      height: 100px;
+      width: 220px;
+    }
+  </style>
+  <!--[if lt IE 7]>
+  <style type="text/css">
+    BODY
+    {
+      font-size: x-small;
+    }
+  </style>
+  <![endif]-->
+
+  <script type="text/javascript" data-basis-config src="../../src/basis.js"></script>
+
+  <script type="text/javascript" src="../demo.js"></script>
+</head>
+
+<body>
+  <div id="demo-container"></div>
+
+  <script type="text/javascript" id="demo-javascript">
+    var UINode = basis.require('basis.ui').Node;
+
+    var SvgDemo = UINode.subclass({
+      container: document.getElementById('demo-container'),
+      template:
+        '<div class="Demo-Section">' +
+          '<b:include src="./example.svg" class="rect" />' +
+          '<b:svg src="./toolbar.svg" use="#circle" class="toolbar red"/>' +
+          '<b:svg src="./toolbar.svg" use="#circle" class="toolbar yellow"/>' +
+          '<b:svg src="./toolbar.svg" use="#circle" class="toolbar green"/>' +
+        '</div>'
+    });
+
+    new SvgDemo();
+
+</script>
+
+</body>
+
+</html>
