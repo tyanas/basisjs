@@ -1,12 +1,10 @@
 var arrayAdd = basis.array.add;
+var walk = require('./ast.js').walk;
 var consts = require('../const.js');
-var TYPE_ELEMENT = consts.TYPE_ELEMENT;
 var TYPE_ATTRIBUTE_EVENT = consts.TYPE_ATTRIBUTE_EVENT;
 var TYPE_CONTENT = consts.TYPE_CONTENT;
-var TOKEN_TYPE = consts.TOKEN_TYPE;
 var TOKEN_BINDINGS = consts.TOKEN_BINDINGS;
 var TOKEN_REFS = consts.TOKEN_REFS;
-var ELEMENT_ATTRIBUTES_AND_CHILDREN = consts.ELEMENT_ATTRIBUTES_AND_CHILDREN;
 
 
 //
@@ -156,49 +154,47 @@ function addTokenLocation(template, options, dest, source){
 //
 //
 
-function normalizeRefs(tokens){
-  function walk(tokens, map, offset){
-    for (var i = offset, token; token = tokens[i]; i++)
+function normalizeRefs(nodes){
+  var map = {};
+
+  walk(nodes, function(type, node, parent){
+    if (type === TYPE_CONTENT)
     {
-      var tokenType = token[TOKEN_TYPE];
-      var refs = token[TOKEN_REFS];
-
-      if (tokenType != TYPE_ATTRIBUTE_EVENT && refs)
-      {
-        for (var j = refs.length - 1, refName; refName = refs[j]; j--)
-        {
-          if (refName.indexOf(':') != -1)
-          {
-            removeTokenRef(token, refName);
-            continue;
-          }
-
-          if (map[refName])
-            removeTokenRef(map[refName].token, refName);
-
-          if (token[TOKEN_BINDINGS] == refName)
-            token[TOKEN_BINDINGS] = j + 1;
-
-          map[refName] = {
-            owner: tokens,
-            token: token
-          };
-        }
-      }
-
-      if (tokenType === TYPE_ELEMENT)
-        walk(token, map, ELEMENT_ATTRIBUTES_AND_CHILDREN);
-      else if (tokenType === TYPE_CONTENT)
-        map[':content'] = {
-          owner: tokens,
-          token: token
-        };
+      map[':content'] = {
+        owner: parent,
+        token: node
+      };
     }
+    else if (type !== TYPE_ATTRIBUTE_EVENT)
+    {
+      var refs = node[TOKEN_REFS];
 
-    return map;
-  }
+      if (!refs)
+        return;
 
-  return walk(tokens, {}, 0);
+      for (var j = refs.length - 1, refName; refName = refs[j]; j--)
+      {
+        if (refName.indexOf(':') != -1)
+        {
+          removeTokenRef(node, refName);
+          continue;
+        }
+
+        if (map[refName])
+          removeTokenRef(map[refName].token, refName);
+
+        if (node[TOKEN_BINDINGS] == refName)
+          node[TOKEN_BINDINGS] = j + 1;
+
+        map[refName] = {
+          owner: parent,
+          token: node
+        };
+      }
+    }
+  });
+
+  return map;
 }
 
 module.exports = {
