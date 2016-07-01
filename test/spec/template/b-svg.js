@@ -79,7 +79,7 @@ module.exports = {
           name: 'with value',
           test: function(){
             var template = createTemplate(
-              '<b:svg src="test"/>'
+              '<b:svg src="./test"/>'
             );
 
             assert(text(template) === text('<svg:svg><svg:use></svg:use></svg:svg>'));
@@ -99,6 +99,26 @@ module.exports = {
 
         assert(text(template) === text('<svg:svg class="foo" a="123"><svg:use></svg:use></svg:svg>'));
         assert(text(template, { bar: 'test' }) === text('<svg:svg class="foo test" a="123" b="test"><svg:use></svg:use></svg:svg>'));
+      }
+    },
+    {
+      name: 'should process b:show on svg root',
+      test: function(){
+        var template = createTemplate(
+          '<b:svg b:show=""/>'
+        );
+
+        assert(text(template) === text('<svg:svg style="display:none;"><svg:use></svg:use></svg:svg>'));
+      }
+    },
+    {
+      name: 'should process b:hide on svg root',
+      test: function(){
+        var template = createTemplate(
+          '<b:svg b:hide="true"/>'
+        );
+
+        assert(text(template) === text('<svg:svg style="display:none;"><svg:use></svg:use></svg:svg>'));
       }
     }
   ]
