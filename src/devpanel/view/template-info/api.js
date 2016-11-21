@@ -49,7 +49,7 @@ module.exports = require('api').define('template', {
     return function(){
       var object = data.output.value.object;
       if (object && object.groupNode)
-        up(data,object.groupNode);
+        up(data, object.groupNode);
     };
   },
   dropTarget: function(data){

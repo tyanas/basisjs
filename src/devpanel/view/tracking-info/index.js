@@ -1,6 +1,11 @@
+var remote = require('../../remote.js');
+var createDynamicView = require('../utils.js').createDynamicView;
+
 var inspectBasis = require('devpanel').inspectBasis;
 var inspectBasisTracker = inspectBasis.require('basis.tracker');
 var inspectBasisDomEvent = inspectBasis.require('basis.dom.event');
+var api = require('api');
+var trackerApi = require('./api.js');
 
 var wrapData = require('basis.data').wrap;
 var Value = require('basis.data').Value;
@@ -11,6 +16,14 @@ var selectedPath = selectedDomNode.as(function(value){
   return inspectBasisTracker.getPathByNode(value);
 });
 
+var data = {
+  input: selectedDomNode,
+  output: new Value()
+};
+
+api
+  .local(trackerApi, data)
+  .channel(data.output, remote.send);
 
 //
 // Role path to node
@@ -140,37 +153,30 @@ var captureEvents = [
   'mouseleave'
 ];
 
-new Window({
-  modal: true,
-  moveable: false,
-  visible: selectedDomNode.as(Boolean),
-  realign: function(){},
-  setZIndex: function(){},
 
-  template: resource('./template/view.tmpl'),
-  binding: {
-    rolesTree: rolesTree,
-    path: path,
-    trackingList: trackingList
-  },
-  action: {
-    close: function(){
-      selectedDomNode.set();
-    }
-  },
+var View = require('./view/index.js');
 
-  handler: {
-    open: function(){
-      captureEvents.forEach(function(eventName){
-        inspectBasisDomEvent.captureEvent(eventName, function(){});
-      });
-    },
-    close: function(){
-      captureEvents.forEach(function(eventName){
-        inspectBasisDomEvent.releaseEvent(eventName);
-      });
-    }
+var view = createDynamicView(data.input, View, {
+  container: document.body
+});
+
+
+view.link(null, function(view, oldView){
+  if (view)
+  {
+    captureEvents.forEach(function(eventName){
+      inspectBasisDomEvent.captureEvent(eventName, function(){});
+    });
+  }
+  else if (oldView)
+  {
+    captureEvents.forEach(function(eventName){
+      inspectBasisDomEvent.releaseEvent(eventName);
+    });
   }
 });
 
-module.exports = selectedDomNode;
+module.exports = {
+  view: view,
+  set: data.input.set.bind(data.input)
+};

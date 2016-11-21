@@ -1,0 +1,19 @@
+<b:style src="./standalone.css"/>
+<b:define name="disconnected" from="connected" type="invert"/>
+
+<div class="view view_{disconnected}" event-mousedown="stop-propagation prevent-default" basis-devpanel-ignore>
+  <div class="no-subject" b:hide="{hasSubject}">
+    Role is not selected
+  </div>
+  <div class="content-wrapper" b:show="{hasSubject}">
+    <div class="main">
+      <div class="sidebar">
+        <!--{rolesTree}-->
+      </div>
+      <div class="content">
+        <!--{path}-->
+        <!--{trackingList}-->
+      </div>
+    </div>
+  </div>
+</div>
