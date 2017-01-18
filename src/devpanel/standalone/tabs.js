@@ -19,6 +19,7 @@ var tabs = new Node({
     require('../view/template-info/tab.js'),
     require('../view/ui/tab.js'),
     require('../view/warnings/tab.js'),
+    require('../view/tracking-info/tab.js'),
     require('../view/file-graph/tab.js')
   ]
 });

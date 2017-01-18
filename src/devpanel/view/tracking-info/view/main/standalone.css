@@ -1,0 +1,37 @@
+.view
+{
+  transition: all .5s 2s;
+}
+.view_disconnected
+{
+  pointer-events: none;
+  opacity: .25;
+  -webkit-filter: grayscale();
+  filter: grayscale();
+}
+
+.no-subject
+{
+  color: #AAA;
+  text-align: center;
+  font: 20px Arial;
+  padding: 40px;
+}
+
+.sidebar
+{
+  float: left;
+  min-width: 300px;
+  max-width: 350px;
+  max-height: 500px;
+  overflow: auto;
+  overflow-x: hidden;
+  margin-left: -4px;
+  border: 1px solid #E8E8E8;
+}
+.content
+{
+  min-width: 400px;
+  overflow: hidden;
+  padding: 20px;
+}

@@ -107,10 +107,12 @@ module.exports = Node.subclass({
 
     this.showSource = new basis.Token(false);
     templateApi.channel.link(this, this.update);
-    api.connected.link(this, function(connected){
-      if (connected)
-        templateApi.init(this.update.bind(this));
-    });
+    // api.connected.link(this, function(connected){
+    //   if (connected) {
+    //     debugger;
+    //     templateApi.init(this.update.bind(this));
+    //   }
+    // });
   },
   destroy: function(){
     this.showSource.destroy();
