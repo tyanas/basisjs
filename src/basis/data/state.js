@@ -21,11 +21,7 @@ var STATE = {
     STATE[name] = value;
     STATE_EXISTS[value] = name;
     this.values[value] = name;
-
-    if (order)
-      order = this.priority.indexOf(order);
-    else
-      order = -1;
+    order = this.priority.indexOf(order);
 
     if (order == -1)
       this.priority.push(value);
@@ -34,7 +30,7 @@ var STATE = {
   },
 
   /**
-  * Returns all registred states
+  * Return all registered states
   * @return {Array.<basis.data.STATE>}
   */
   getList: function(){
@@ -42,7 +38,7 @@ var STATE = {
   },
 
   /**
-  * Check value is valid state.
+  * Check if `value` is a valid state.
   * @return {boolean}
   */
   isValid: function(value){

@@ -17,7 +17,7 @@ var SUBSCRIPTION = {
   ALL: 0,
 
   /**
-  * Register new type of subscription
+  * Register new type of a subscription
   * @param {string} name
   * @param {Object} handler
   * @param {function()} action
@@ -31,14 +31,14 @@ var SUBSCRIPTION = {
     SUBSCRIPTION[name] = subscriptionSeed;
     SUBSCRIPTION.ALL |= subscriptionSeed;
 
-    subscriptionSeed <<= 1;
+    subscriptionSeed <<= 1; // `value <<= N` is equivalent to `value = value * 2^N`
   },
 
   /**
-  * @param {string} propertyName Name of property for subscription. Property
-  *   should be instance of {basis.data.AbstractData} class.
-  * @param {string=} eventName Name of event which fire when property changed.
-  *   If omitted it will be equal to property name with 'Changed' suffix.
+  * @param {string} propertyName Name of a property for a subscription. The property
+  *   should be an instance of a {basis.data.AbstractData} class.
+  * @param {string=} eventName Name of an event which is fired when the property changes.
+  *   If omitted it will be equal to the property name with 'Changed' suffix.
   */
   addProperty: function(propertyName, eventName){
     var handler = {};
