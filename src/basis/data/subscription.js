@@ -17,7 +17,7 @@ var SUBSCRIPTION = {
   ALL: 0,
 
   /**
-  * Register new type of a subscription
+  * Register new type of a subscription with custom handler and custom action
   * @param {string} name
   * @param {Object} handler
   * @param {function()} action
@@ -29,12 +29,17 @@ var SUBSCRIPTION = {
     };
 
     SUBSCRIPTION[name] = subscriptionSeed;
-    SUBSCRIPTION.ALL |= subscriptionSeed;
+    SUBSCRIPTION.ALL |= subscriptionSeed; // binary `or`
 
     subscriptionSeed <<= 1; // `value <<= N` is equivalent to `value = value * 2^N`
+    // Код свойства – это числовое значение, которое определяется единственным битом
+    // на определенной позиции. Таким образом, чтобы определить подписку
+    // на несколько свойств, необходимо сложить соответствующие свойству коды
+    // (или использовать оператор бинарного "или" `|`)
   },
 
   /**
+  * Register new type of a subscription with standard handler and standard action
   * @param {string} propertyName Name of a property for a subscription. The property
   *   should be an instance of a {basis.data.AbstractData} class.
   * @param {string=} eventName Name of an event which is fired when the property changes.
@@ -57,7 +62,7 @@ var SUBSCRIPTION = {
   },
 
   /**
-  * Returns descriptor for subscription mask.
+  * Return descriptor for subscription mask.
   * @param {number} mask
   */
   getMaskConfig: function(mask){
@@ -84,7 +89,7 @@ var SUBSCRIPTION = {
 
           for (var key in cfg.handler)
             handler[key] = handler[key]
-              ? mixFunctions(handler[key], cfg.handler[key])  // suppose it never be used, but do it for double sure
+              ? mixFunctions(handler[key], cfg.handler[key])  // supposedly it will never be used, but do double check to make sure we miss no handler here
               : cfg.handler[key];
         }
         idx <<= 1;
@@ -123,7 +128,7 @@ var SUBSCRIPTION = {
   },
 
   /**
-  * Breaks link between objects connected by subscription.
+  * Break link between objects connected by subscription.
   * @param {string} type
   * @param {basis.data.AbstractData} from
   * @param {basis.data.AbstractData} to
@@ -145,13 +150,13 @@ var SUBSCRIPTION = {
     }
     else
     {
-      /** @cut */ basis.dev.warn('Trying remove non-exists subscription');
+      /** @cut */ basis.dev.warn('Trying to remove a non-existent subscription');
     }
   },
 
 
   /**
-  * Adds subscription to object.
+  * Add subscription to object.
   * @param {basis.data.Emitter} object
   * @param {number} mask
   */
@@ -165,7 +170,7 @@ var SUBSCRIPTION = {
   },
 
   /**
-  * Removes subscription from object.
+  * Remove subscription from object.
   * @param {basis.data.Emitter} object
   * @param {number} mask
   */
